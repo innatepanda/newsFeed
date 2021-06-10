@@ -1,1 +1,1 @@
-testing.
+View the result at https://api-testing-news.netlify.app/
