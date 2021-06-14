@@ -1,1 +1,1 @@
-View the result at https://api-testing-news.netlify.app/
+View the result at https://api-testing-news.netlify.app/ and github pages
