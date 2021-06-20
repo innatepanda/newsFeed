@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Sidemenu.module.css'
-import {Card, CardImg, CardBody} from 'reactstrap'
+import {Card} from 'reactstrap'
 const Sidemenu = (props) => {
 return (
 <div className={classes.sidemenu}>
