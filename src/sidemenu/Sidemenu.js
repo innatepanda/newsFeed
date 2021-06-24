@@ -26,7 +26,8 @@ render(){
          <header className={classes.writing}>Search news</header>
          <Input type="text" id="search" />
          <Button color="primary"><Search /></Button>
-         <Button close ></Button>
+         <Button color="primary"><Search /></Button>
+         
          </div>
          
          
