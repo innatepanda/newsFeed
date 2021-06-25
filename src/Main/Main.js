@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './mainbody.css'
 import {Card, CardBody, Button, Spinner, CardFooter} from 'reactstrap'
 
-
+var filterednews=[]
 class Main extends Component{
   constructor(props)
   {
@@ -18,7 +18,7 @@ class Main extends Component{
       
 
     }
-    window.history.replaceState(null, "News", "/News/0")
+    window.history.replaceState(null, "News", "/News/1")
   }
   
   async componentDidMount() {
@@ -30,8 +30,8 @@ class Main extends Component{
           console.log(result.data)
           this.setState({
             isLoaded: true,
-            items: result.data.slice(0, 20),
-            maxpgs:Math.ceil(20/this.state.perpage)
+            items: result.data,
+            maxpgs:Math.ceil(result.data.length/this.state.perpage)
           });
         },
         (error) => {
@@ -44,9 +44,38 @@ class Main extends Component{
   render(){
     if(this.state.isLoaded)
     {
+      
+      console.log(this.props.searchVar)
+      var thispageNews;
       var firstIndex=this.state.pg*this.state.perpage;
         var lastIndex=firstIndex+this.state.perpage;
-        var thispageNews=this.state.items.slice(firstIndex, lastIndex);
+        if(this.props.searchVar!=="" && filterednews.length===0)
+          {
+            
+            this.state.items.map((data)=>{
+              if(data.title.toLowerCase().search(this.props.searchVar.toLowerCase())!==-1 ||
+              data.published.toLowerCase().search(this.props.searchVar.toLowerCase())!==-1  
+              
+               )
+              {
+                
+                filterednews.push(data)
+              }
+              
+              
+              
+            })
+            console.log(filterednews)
+             thispageNews=filterednews.slice(firstIndex, lastIndex)
+          }
+          else
+          {
+            filterednews=[]
+            thispageNews=this.state.items.slice(firstIndex, lastIndex);
+          }
+               
+
+        console.log(thispageNews)
         var cname="maindiv";
         var cardname="card";
       if(this.props.newsType===1)
@@ -59,6 +88,11 @@ class Main extends Component{
         return(
           <div>
             <div className={cname}>
+              {
+                filterednews.length===0 && this.props.searchVar!==""?<div>
+                  no search results found.
+                </div>:""
+              }
             {
               thispageNews.map((data, index)=>{
               
@@ -71,7 +105,7 @@ class Main extends Component{
                           items: this.state.items.filter(item => item.id !== data.id),
                         }, ()=>{
                           this.setState({
-                            maxpgs:Math.ceil(this.state.items.length/this.state.perpage)
+                            maxpgs: this.props.searchVar==""?Math.ceil(this.state.items.length/this.state.perpage):Math.ceil(filterednews.length/this.state.perpage)
 
                           })
                           thispageNews= thispageNews.filter(item => item !== data)
@@ -80,10 +114,7 @@ class Main extends Component{
                       }}  className="btn-remove" />
                       <em>{data.title}</em>
                       <CardBody>
-                        {data.summary.substr(0, 220)}
-                        {
-                          data.summary.length>220?"{...}":''
-                        }
+                        {data.summary}
                         
                       </CardBody>
                       <CardFooter>
@@ -104,20 +135,20 @@ class Main extends Component{
                 this.setState({
                   pg:this.state.pg-1
                 }, ()=>{
-                  window.history.replaceState(null, "News", "/News/"+this.state.pg)
+                  window.history.replaceState(null, "News", "/News/"+(this.state.pg+1))
 
                 })
               }}>prev</Button>
             }
             pg-{this.state.pg+1}
             {
-              this.state.pg===this.state.maxpgs-1?
+              this.state.pg===this.state.maxpgs-1 || this.state.pg===Math.ceil(filterednews.length/this.state.perpage)-1 || (filterednews.length==0 && this.props.searchVar!=="")?
               <Button color="info" disabled className="button">next</Button>:
               <Button color="info" className="button" onClick={()=>{
                 this.setState({
                   pg:this.state.pg+1
                 }, ()=>{
-                  window.history.replaceState(null, "News", "/News/"+this.state.pg)
+                  window.history.replaceState(null, "News", "/News/"+(this.state.pg+1))
                   })
               }}>next</Button>
             }
