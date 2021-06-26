@@ -52,7 +52,7 @@ class Main extends Component{
         if(this.props.searchVar!=="" && filterednews.length===0)
           {
             
-            this.state.items.map((data)=>{
+            this.state.items.forEach((data)=>{
               if(data.title.toLowerCase().search(this.props.searchVar.toLowerCase())!==-1 ||
               data.published.toLowerCase().search(this.props.searchVar.toLowerCase())!==-1  
               
@@ -105,7 +105,7 @@ class Main extends Component{
                           items: this.state.items.filter(item => item.id !== data.id),
                         }, ()=>{
                           this.setState({
-                            maxpgs: this.props.searchVar==""?Math.ceil(this.state.items.length/this.state.perpage):Math.ceil(filterednews.length/this.state.perpage)
+                            maxpgs: this.props.searchVar===""?Math.ceil(this.state.items.length/this.state.perpage):Math.ceil(filterednews.length/this.state.perpage)
 
                           })
                           thispageNews= thispageNews.filter(item => item !== data)
@@ -142,7 +142,7 @@ class Main extends Component{
             }
             pg-{this.state.pg+1}
             {
-              this.state.pg===this.state.maxpgs-1 || this.state.pg===Math.ceil(filterednews.length/this.state.perpage)-1 || (filterednews.length==0 && this.props.searchVar!=="")?
+              this.state.pg===this.state.maxpgs-1 || this.state.pg===Math.ceil(filterednews.length/this.state.perpage)-1 || (filterednews.length===0 && this.props.searchVar!=="")?
               <Button color="info" disabled className="button">next</Button>:
               <Button color="info" className="button" onClick={()=>{
                 this.setState({
