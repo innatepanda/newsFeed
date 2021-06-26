@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './mainbody.css'
-import {Card, CardBody, Button, Spinner, CardFooter} from 'reactstrap'
+import {Card, CardBody, Button,  CardFooter} from 'reactstrap'
 
 var filterednews=[]
 class Main extends Component{
@@ -11,7 +11,7 @@ class Main extends Component{
     this.state={
       isLoaded:false,
       
-      pg:0,
+      pg:this.props.pgg,
       perpage:6,
       maxpgs:0,
       items:[],
@@ -45,7 +45,7 @@ class Main extends Component{
     if(this.state.isLoaded)
     {
       
-      console.log(this.props.searchVar)
+      
       var thispageNews;
       var firstIndex=this.state.pg*this.state.perpage;
         var lastIndex=firstIndex+this.state.perpage;
@@ -63,6 +63,7 @@ class Main extends Component{
               }
               
               
+
               
             })
             console.log(filterednews)
@@ -91,9 +92,7 @@ class Main extends Component{
               {
                 filterednews.length===0 && this.props.searchVar!==""?<div>
                   no search results found.
-                </div>:""
-              }
-            {
+                </div>:
               thispageNews.map((data, index)=>{
               
                   return (
@@ -125,6 +124,8 @@ class Main extends Component{
                 })
               
             }
+              
+            
             
           </div >
           <div className="btns">
@@ -163,7 +164,10 @@ class Main extends Component{
     
     else{
       return (
-        <Spinner size="sm" color="secondary" />
+        <div>
+            Loading. Please wait.
+        </div>
+        
       )
     }
     
